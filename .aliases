@@ -1,0 +1,20 @@
+# Files and folder management 
+alias la="ls --color -lah"
+alias ll="ls --color -lh"
+alias -- -="cd -"
+
+# Privileges management
+alias _="sudo"
+
+# Get week number
+alias week='date +%V'
+
+# Network utils
+alias p="ping"
+alias p4="alias -4"
+alias p6="ping -6"
+alias mtr="mtr -z"
+alias ip4="dig +short myip.opendns.com @resolver1.opendns.com"
+
+# Aliases for several tools
+alias dc="docker-compose"
