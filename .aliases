@@ -11,10 +11,27 @@ alias week='date +%V'
 
 # Network utils
 alias p="ping"
-alias p4="alias -4"
+alias p4="ping -4"
 alias p6="ping -6"
 alias mtr="mtr -z"
 alias ip4="dig +short myip.opendns.com @resolver1.opendns.com"
 
 # Aliases for several tools
+alias activate="source venv2/bin/activate"
+alias nose="nosetests -svx"
+
+# Aliases for Docker and docker-compose
 alias dc="docker-compose"
+function dc-respawn() { 
+  # This is similar to dc up when you modify the docker-compose file
+  # but sometimes, I need to completly rebuild a new container at my
+  # work.
+
+  for container in $@; do
+    dc kill $container && dc rm -f $container && dc up -d $container
+  done
+  
+  if [ "$#" -ne 0 ]; then
+    dc logs -f $@
+  fi
+}
