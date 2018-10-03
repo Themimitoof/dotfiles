@@ -17,8 +17,9 @@ alias mtr="mtr -z"
 alias ip4="dig +short myip.opendns.com @resolver1.opendns.com"
 
 # Aliases for several tools
-alias activate="source venv2/bin/activate"
 alias nose="nosetests -svx"
+function activata() { source venv*/bin/activate }
+
 
 # Aliases for Docker and docker-compose
 alias dc="docker-compose"

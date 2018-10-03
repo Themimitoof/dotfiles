@@ -8,10 +8,20 @@ Plug 'klen/python-mode'
 Plug 'pangloss/vim-javascript'
 Plug 'vim-ruby/vim-ruby'
 
+call plug#end()
 
 " Tweaks
+set backupdir=/tmp
+
 syntax on
+syntax enable
+
 set number
+set tabstop=4
+set softtabstop=4
+set expandtab 
+
 set mouse-=a
 let g:airline_theme='base16_eighties'
 set laststatus=2
+

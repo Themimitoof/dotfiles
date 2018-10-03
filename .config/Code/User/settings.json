@@ -1,0 +1,21 @@
+{
+    "window.titleBarStyle": "custom",
+    "files.exclude": {
+        "**/*.pyc": true,
+        "**/__pychache__": true
+    },
+    "editor.rulers": [ 79 ],
+    "python.linting.pep8Enabled":  true,
+    "python.linting.pylintEnabled": true,
+    "python.linting.pylintCategorySeverity.convention": "Information",
+    "python.linting.pylintCategorySeverity.refactor": "Hint",
+    "python.linting.pylintCategorySeverity.warning": "Warning",
+    "python.linting.pylintCategorySeverity.error": "Error",
+    "python.linting.enabled": true,
+    "python.linting.pydocstyleEnabled": false,
+    "workbench.colorTheme": "Base16 Tomorrow Dark",
+    "breadcrumbs.enabled": true,
+    "clock.dateFormat": "HH:MM ('Week: 'W)",
+    "workbench.statusBar.feedback.visible": false,
+    "vsicons.dontShowNewVersionMessage": true
+}

@@ -1,0 +1,17 @@
+#! /usr/bin/env bash
+# This script permit to create in one command an Python env
+
+WORKINGDIR=$(pwd)
+VENVDIR="$HOME/venv3"
+PYVERSION="py3"
+PROJECT=$1
+[[ $PROJECT == "" ]] && PROJECT=$(basename $(pwd))
+
+VENVNAME="$PROJECT-$PYVERSION"
+VENV="$VENVDIR/$VENVNAME"
+
+python3 -m venv $VENV
+
+. $VENV/bin/activate
+pip install -U setuptools pip pycodestyle pylint
+ln -s $VENV $WORKINGDIR/venv3
