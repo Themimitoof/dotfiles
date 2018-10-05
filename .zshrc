@@ -1,5 +1,5 @@
 export ZSH="/home/themimitoof/.oh-my-zsh"
-ZSH_THEME="robbyrussell"
+ZSH_THEME="norm"
 
 # Plugins
 plugins=(

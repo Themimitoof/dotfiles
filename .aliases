@@ -18,7 +18,7 @@ alias ip4="dig +short myip.opendns.com @resolver1.opendns.com"
 
 # Aliases for several tools
 alias nose="nosetests -svx"
-function activata() { source venv*/bin/activate }
+function activate() { source venv*/bin/activate }
 
 
 # Aliases for Docker and docker-compose
