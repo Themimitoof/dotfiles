@@ -2,7 +2,10 @@
     "window.titleBarStyle": "custom",
     "files.exclude": {
         "**/*.pyc": true,
-        "**/__pychache__": true
+        "**/__pychache__": true,
+        "venv2": true,
+        "venv3": true,
+        "node_modules": true
     },
     "editor.rulers": [ 79 ],
     "python.linting.pep8Enabled":  true,
