@@ -2,7 +2,7 @@
     "window.titleBarStyle": "custom",
     "files.exclude": {
         "**/*.pyc": true,
-        "**/__pychache__": true,
+        "**/__pycache__": true,
         "venv2": true,
         "venv3": true,
         "node_modules": true
@@ -20,5 +20,6 @@
     "breadcrumbs.enabled": true,
     "clock.dateFormat": "HH:MM ('Week: 'W)",
     "workbench.statusBar.feedback.visible": false,
-    "vsicons.dontShowNewVersionMessage": true
+    "vsicons.dontShowNewVersionMessage": true,
+    "git.enableCommitSigning": true
 }
