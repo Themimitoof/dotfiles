@@ -21,5 +21,6 @@
     "clock.dateFormat": "HH:MM ('Week: 'W)",
     "workbench.statusBar.feedback.visible": false,
     "vsicons.dontShowNewVersionMessage": true,
-    "git.enableCommitSigning": true
+    "git.enableCommitSigning": true,
+    "files.trimTrailingWhitespace": true
 }
