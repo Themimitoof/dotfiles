@@ -17,6 +17,7 @@ alias mtr="mtr -z"
 alias ip4="dig +short myip.opendns.com @resolver1.opendns.com"
 
 # Aliases for several tools
+alias restartpulse="pulseaudio --kill && pulseaudio --start"
 alias nose="nosetests -svx"
 function activate() { source venv*/bin/activate }
 
