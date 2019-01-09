@@ -21,6 +21,8 @@ alias restartpulse="pulseaudio --kill && pulseaudio --start"
 alias nose="nosetests -svx"
 function activate() { source venv*/bin/activate }
 
+# Extend zsh git aliases
+alias glr="git pull --rebase"
 
 # Aliases for Docker and docker-compose
 alias dc="docker-compose"
