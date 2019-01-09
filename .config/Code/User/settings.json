@@ -5,7 +5,8 @@
         "**/__pycache__": true,
         "venv2": true,
         "venv3": true,
-        "node_modules": true
+        "node_modules": true,
+        ".eggs": true
     },
     "editor.rulers": [ 79 ],
     "python.linting.pep8Enabled":  true,
@@ -20,7 +21,9 @@
     "breadcrumbs.enabled": true,
     "clock.dateFormat": "HH:MM ('Week: 'W)",
     "workbench.statusBar.feedback.visible": false,
+    "files.trimTrailingWhitespace": true,
     "vsicons.dontShowNewVersionMessage": true,
+    "terminal.integrated.rendererType": "dom",
     "git.enableCommitSigning": true,
-    "files.trimTrailingWhitespace": true
+    "window.zoomLevel": 0
 }
