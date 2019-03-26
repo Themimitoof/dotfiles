@@ -1,4 +1,4 @@
-# Files and folder management 
+# Files and folder management
 alias la="ls --color -lah"
 alias ll="ls --color -lh"
 alias -- -="cd -"
@@ -26,7 +26,7 @@ alias glr="git pull --rebase"
 
 # Aliases for Docker and docker-compose
 alias dc="docker-compose"
-function dc-respawn() { 
+function dc-respawn() {
   # This is similar to dc up when you modify the docker-compose file
   # but sometimes, I need to completly rebuild a new container at my
   # work.
@@ -34,7 +34,7 @@ function dc-respawn() {
   for container in $@; do
     dc kill $container && dc rm -f $container && dc up -d $container
   done
-  
+
   if [ "$#" -ne 0 ]; then
     dc logs -f $@
   fi

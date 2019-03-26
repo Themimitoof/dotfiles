@@ -2,7 +2,7 @@
 # This script permit to create in one command an Python env
 
 WORKINGDIR=$(pwd)
-VENVDIR="$HOME/venv3"
+VENVDIR="$HOME/venv"
 PYVERSION="py3"
 PROJECT=$1
 [[ $PROJECT == "" ]] && PROJECT=$(basename $(pwd))
