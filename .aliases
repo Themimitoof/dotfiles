@@ -13,16 +13,32 @@ alias week='date +%V'
 alias p="ping"
 alias p4="ping -4"
 alias p6="ping -6"
-alias mtr="mtr -z"
+alias mtr="mtr -bze"
 alias ip4="dig +short myip.opendns.com @resolver1.opendns.com"
 
 # Aliases for several tools
 alias restartpulse="pulseaudio --kill && pulseaudio --start"
 alias nose="nosetests -svx"
+alias gocode="activate && code ."
+alias gopoetry="poetry shell && code ."
 function activate() { source venv*/bin/activate }
+alias json_format="python -m json.tool"
+alias ssh_reload="ssh-keygen -R" # Reload ssh host keys
+alias share_ipad="systemctl start avahi-daemon && uxplay"
+alias share_android="scrcpy"
 
 # Extend zsh git aliases
 alias glr="git pull --rebase"
+alias gcsa="git commit -S --amend"
+
+# Function for upload a file/image to Krin
+function krin_up() {
+    curl -X POST -H "X-Api-Key: $KRIN_APIKEY" -d @$@ https://krin.themimitoof.fr/files -v
+}
+
+function shortner() {
+    curl -XPOST -H "Content-Type: application/json" -H "ApiKey: ${SHRT_APIKEY}" -d "{\"link\": \"${1}\"}" https://skusku.pw/s
+}
 
 # Aliases for Docker and docker-compose
 alias dc="docker-compose"
@@ -37,5 +53,14 @@ function dc-respawn() {
 
   if [ "$#" -ne 0 ]; then
     dc logs -f $@
+  fi
+}
+
+function pyenv {
+  if [[ "$1" == "use" ]]; then
+    shift 1
+    command pyenv local "$@"
+  else
+    command pyenv "$@"
   fi
 }
