@@ -1,0 +1,6 @@
+old-dotfiles
+
+{{ if ne .chezmoi.fqdnHostname "kalimdor" }}
+encrypted_dot_zshrc_gandi.asc
+encrypted_dot_aliases_gandi.asc
+{{ end }}

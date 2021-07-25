@@ -1,0 +1,228 @@
+#!/usr/bin/python3
+# Script retrieving Openstack tokens to use openstack CLI with Gandi.net Openstack platform
+# Script made by somebody (to not disclose his name) at Gandi
+
+import base64
+import ctypes
+import getpass
+import sys
+
+import requests
+from fido2 import cbor
+from fido2.client import ClientError, Fido2Client, WindowsClient
+from fido2.hid import CtapHidDevice
+from fido2.rpid import verify_app_id
+
+AUTH_URL = "https://keystone.sd6.api.gandi.net:5000"
+ORIGIN = "https://id.gandi.net"
+print("Username [{}]: ".format(getpass.getuser()), end="", file=sys.stderr)
+USERNAME = input() or getpass.getuser()
+DOMAIN = "public"
+PROJECT = USERNAME
+PASSWORD = getpass.getpass("Password for {}@{}: ".format(USERNAME, DOMAIN), sys.stderr)
+SCOPE = {
+    "project": {
+        "domain": {
+            "name": DOMAIN,
+        },
+        "name": PROJECT,
+    }
+}
+
+
+class InvalidDevice(Exception):
+    pass
+
+
+def print_token_from_response(response):
+    resp_body = response.json()["token"]
+    print("Audit IDs: {}".format(resp_body["audit_ids"]), file=sys.stderr)
+    print("Token expires at {}".format(resp_body["expires_at"]), file=sys.stderr)
+    print("export OS_AUTH_TYPE=v3token;")
+    print("export OS_AUTH_URL={};".format(AUTH_URL))
+    print("export OS_COMPUTE_API_VERSION=2.87;")
+    print("export OS_IDENTITY_API_VERSION=3;")
+    print("export OS_INTERFACE=public;")
+    print("export OS_PROJECT_DOMAIN_NAME={};".format(DOMAIN))
+    print("export OS_PROJECT_NAME={};".format(PROJECT))
+    print("export OS_TOKEN={};".format(response.headers["X-Subject-Token"]))
+
+
+def verify_facets_id(appid, origin):
+    if verify_app_id(appid, origin):
+        return True
+    response = requests.get(appid)
+    response = response.json()
+    for facet in response["trustedFacets"]:
+        for ID in facet["ids"]:
+            if verify_app_id(ID, origin):
+                return True
+    return False
+
+
+def decode_data(data: bytes) -> dict:
+    return cbor.decode(base64.b64decode(data))
+
+
+def assert_devices(clients: list, pkey: dict):
+    for client in clients:
+        try:
+            return client.get_assertion(pkey)
+        except ClientError as err:
+            if err.code == ClientError.ERR.TIMEOUT:
+                raise
+    raise InvalidDevice()
+
+
+def get_full_assertion(request_options: dict, origin: str) -> dict:
+    pkey = request_options["publicKey"]
+    has_appid_extension = "appid" in pkey["extensions"]
+    if WindowsClient.is_available() and not ctypes.windll.shell32.IsUserAnAdmin():
+        clients = [WindowsClient(origin)]
+    else:
+        devs = list(CtapHidDevice.list_devices())
+        if not devs:
+            raise InvalidDevice()
+
+        clients = [Fido2Client(d, origin) for d in devs]
+
+    print("Press your webauthn device button ...", file=sys.stderr)
+
+    try:
+        return assert_devices(clients, pkey)
+    except InvalidDevice:
+        pass
+
+    if has_appid_extension:
+        if WindowsClient.is_available() and not ctypes.windll.shell32.IsUserAnAdmin():
+            clients = [WindowsClient(origin, verify=verify_facets_id)]
+        else:
+            clients = [Fido2Client(d, origin, verify=verify_facets_id) for d in devs]
+        pkey["rp_id"] = pkey["extensions"]["appid"]
+        try:
+            return assert_devices(clients, pkey)
+        except InvalidDevice:
+            pass
+
+    raise InvalidDevice()
+
+
+def get_webauthn_response(challenge: bytes, origin: str) -> dict:
+    assertions, client_data = get_full_assertion(decode_data(challenge), origin)
+    assertion = assertions[0]
+    return {
+        "authenticator_data": base64.urlsafe_b64encode(assertion.auth_data).decode(),
+        "client_data": client_data.decode(),
+        "credential_id": base64.urlsafe_b64encode(assertion.credential["id"]).decode(),
+        "signature": base64.urlsafe_b64encode(assertion.signature).decode(),
+    }
+
+
+password_query = {
+    "auth": {
+        "identity": {
+            "methods": ["password"],
+            "password": {
+                "user": {
+                    "name": USERNAME,
+                    "domain": {
+                        "name": DOMAIN,
+                    },
+                    "password": PASSWORD,
+                }
+            },
+        },
+        "scope": SCOPE,
+    }
+}
+
+auth_tentative_pass = requests.post(
+    "{}/v3/auth/tokens".format(AUTH_URL), json=password_query
+)
+if auth_tentative_pass.status_code == 201:
+    print_token_from_response(auth_tentative_pass)
+    sys.exit(0)
+
+try:
+    password_receipt = auth_tentative_pass.headers["Openstack-Auth-Receipt"]
+except KeyError:
+    print("Invalid user or password", file=sys.stderr)
+    sys.exit(1)
+
+receipt_body = auth_tentative_pass.json()
+
+if any("webauthn" in x for x in receipt_body["required_auth_methods"]):
+    if list(CtapHidDevice.list_devices()):
+        webauthn_query_phase_1 = {
+            "auth": {
+                "identity": {
+                    "methods": ["webauthn"],
+                    "webauthn": {
+                        "user": {
+                            "name": USERNAME,
+                            "domain": {
+                                "name": DOMAIN,
+                            },
+                        }
+                    },
+                },
+                "scope": SCOPE,
+            }
+        }
+        webauthn_phase_1_data = requests.post(
+            "{}/v3/auth/tokens".format(AUTH_URL),
+            json=webauthn_query_phase_1,
+            headers={"Openstack-Auth-Receipt": password_receipt},
+        )
+        phase_1_body = webauthn_phase_1_data.json()
+        webauthn_query_phase_2 = webauthn_query_phase_1
+        webauthn_receipt = webauthn_phase_1_data.headers["Openstack-Auth-Receipt"]
+        try:
+            webauthn_query_phase_2["auth"]["identity"]["webauthn"]["user"].update(
+                get_webauthn_response(
+                    phase_1_body["auth_methods_parameters"]["webauthn"]["clientData"],
+                    ORIGIN,
+                )
+            )
+            webauthn_phase_2_data = requests.post(
+                "{}/v3/auth/tokens".format(AUTH_URL),
+                json=webauthn_query_phase_2,
+                headers={"Openstack-Auth-Receipt": webauthn_receipt},
+            )
+            if webauthn_phase_2_data.status_code == 201:
+                print_token_from_response(webauthn_phase_2_data)
+                sys.exit(0)
+        except InvalidDevice:
+            print("Failed to authenticate using webauthn. Proceeding", file=sys.stderr)
+
+if any("totp" in x for x in receipt_body["required_auth_methods"]):
+    print("Enter your current TOTP code: ", end="", file=sys.stderr)
+    PASSCODE = input()
+    totp_query = {
+        "auth": {
+            "identity": {
+                "methods": ["totp"],
+                "totp": {
+                    "user": {
+                        "name": USERNAME,
+                        "domain": {
+                            "name": DOMAIN,
+                        },
+                        "passcode": PASSCODE,
+                    }
+                },
+            },
+            "scope": SCOPE,
+        }
+    }
+    totp_response = requests.post(
+        "{}/v3/auth/tokens".format(AUTH_URL),
+        json=totp_query,
+        headers={"Openstack-Auth-Receipt": password_receipt},
+    )
+    if totp_response.status_code == 201:
+        print_token_from_response(totp_response)
+        sys.exit(0)
+
+print("Unable to authenticate", file=sys.stderr)
+sys.exit(1)

@@ -1,0 +1,76 @@
+# Files and folder management
+alias la="ls --color -lah"
+alias ll="ls --color -lh"
+
+# Privileges management
+alias _="sudo"
+
+# Get week number
+alias week='date +%V'
+
+# Network utils
+alias p="ping"
+alias p4="ping -4"
+alias p6="ping -6"
+alias mtr="mtr -bze"
+
+# Python related commands
+alias gocode="activate && code ."
+alias nose="nosetests -svx"
+
+# Activate a Python virtualenv by using Poetry if used or via a classic venv
+function activate() {
+  if [ -f pyproject.toml ]; then
+    IS_POETRY=$(grep "tool.poetry" pyproject.toml)
+
+    if [ "$?" == "0" ]; then
+      poetry shell
+    fi
+  else
+    source venv*/bin/activate
+  fi
+}
+
+# Mimic the `nvm use` command for pyenv
+function pyenv {
+  if [[ "$1" == "use" ]]; then
+    shift 1
+    command pyenv local "$@"
+  else
+    command pyenv "$@"
+  fi
+}
+
+# Aliases for several tools
+alias restartpulse="pulseaudio --kill && pulseaudio --start"
+alias ssh_reload="ssh-keygen -R" # Reload ssh host keys
+alias share_ipad="systemctl start avahi-daemon && uxplay"
+alias share_android="scrcpy"
+
+# Extend zsh git aliases
+alias glr="git pull --rebase"
+alias gcsa="git commit -S --amend"
+
+# Dig alias
+alias digs="dig +short"
+alias digas="dig +short AAAA"
+
+# Day and night theme changer aliases
+alias day="base16_tomorrow"
+alias night="base16_tomorrow-night"
+
+# Aliases for Docker and docker-compose
+alias dc="docker-compose"
+function dc-respawn() {
+  # This is similar to dc up when you modify the docker-compose file
+  # but sometimes, I need to completly rebuild a new container at my
+  # work.
+
+  for container in $@; do
+    dc kill $container && dc rm -f $container && dc up -d $container
+  done
+
+  if [ "$#" -ne 0 ]; then
+    dc logs -f $@
+  fi
+}
