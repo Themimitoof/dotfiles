@@ -1,4 +1,5 @@
 old-dotfiles
+README.md
 
 {{ if ne .chezmoi.fqdnHostname "kalimdor" }}
 encrypted_dot_zshrc_gandi.asc
