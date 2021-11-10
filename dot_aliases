@@ -62,6 +62,12 @@ alias night="base16_tomorrow-night"
 # Aliases for Docker and docker-compose
 alias docker-compose="docker compose"
 alias dc="docker compose"
+alias dcu="docker compose up"
+alias dcud="docker compose up -d"
+alias dcua="docker compose up --attach"
+alias dcp="docker compose ps"
+alias dck="docker compose kill"
+alias dcd="docker compose down"
 function dc-respawn() {
   # This is similar to dc up when you modify the docker-compose file
   # but sometimes, I need to completly rebuild a new container at my
