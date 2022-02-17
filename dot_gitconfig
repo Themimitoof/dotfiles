@@ -1,0 +1,15 @@
+[user]
+	name = Michael Vieira
+	# NOTE: Add the rest of the default configuration and if needed,
+	# includeIf directives for managing the different identities
+
+	# TODO: find a way to automate this part that work for any computer
+	# that use this repo
+
+
+[alias]
+rollback = reset --soft HEAD^
+trash = reset --hard
+
+[core]
+	excludesFile = ~/.gitignore_global
