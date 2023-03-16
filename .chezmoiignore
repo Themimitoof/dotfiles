@@ -1,7 +1,12 @@
 old-dotfiles
 README.md
 
-{{ if ne .chezmoi.fqdnHostname "kalimdor" }}
+{{ if ne .chezmoi.fqdnHostname "izumo" }}
 encrypted_dot_zshrc_gandi.asc
 encrypted_dot_aliases_gandi.asc
 {{ end }}
+
+{{ if ne .chezmoi.os "linux" }}
+.config/rofimoji.rc
+{{ end }}
+
