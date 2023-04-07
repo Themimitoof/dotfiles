@@ -14,6 +14,10 @@ alias p4="ping -4"
 alias p6="ping -6"
 alias mtr="mtr -bze"
 
+# Vim aliases
+alias vim="nvim"
+alias v="nvim"
+
 # Python related commands
 alias gocode="activate; code ."
 alias nose="nosetests -svx"
@@ -56,8 +60,8 @@ alias digs="dig +short"
 alias digas="dig +short AAAA"
 
 # Day and night theme changer aliases
-alias day="base16_tomorrow"
-alias night="base16_tomorrow-night"
+alias day="kitty +kitten themes --reload-in=all Catppuccin-Latte"
+alias night="kitty +kitten themes --reload-in=all Catppuccin-Macchiato"
 
 # Aliases for Docker and docker-compose
 alias docker-compose="docker compose"

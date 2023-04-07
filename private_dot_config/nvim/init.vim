@@ -1,7 +1,6 @@
 " Enable plugins
 call plug#begin()
 
-Plug 'chriskempson/base16-vim'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 
@@ -17,8 +16,10 @@ set number
 set tabstop=4
 set softtabstop=4
 set expandtab
+set smartindent
 
+set encoding=utf-8
 set mouse-=a
-let g:airline_theme='base16_eighties'
+let g:airline_theme='minimalist'
 set laststatus=2
 set nofoldenable
