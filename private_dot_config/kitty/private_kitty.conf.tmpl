@@ -1,0 +1,25 @@
+# BEGIN_KITTY_THEME
+# Catppuccin-Macchiato
+include current-theme.conf
+# END_KITTY_THEME
+
+# Window settings
+confirm_os_window_close 1
+#term xterm-256color
+{{- if eq .chezmoi.os "linux" }}
+linux_display_server x11
+{{- end }}
+
+# Fonts management
+font_family Jetbrains Mono
+
+# Shortcuts
+mouse_map left click ungrabbed no_op
+mouse_map ctrl+left click grabbed,ungrabbed mouse_click_url
+{{- if eq .chezmoi.os "darwin" }}
+mouse_map super+left click grabbed,ungrabbed mouse_click_url
+
+# Mimic the ctrl+left/right like on Linux but with the Option key
+map alt+left send_text all \x1b\x62
+map alt+right send_text all \x1b\x66
+{{- end }}
