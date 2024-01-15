@@ -85,3 +85,10 @@ function dc-respawn() {
     dc logs -f $@
   fi
 }
+
+
+function extbright() {
+  for monitor in {1..$(ddcutil detect | grep Display | wc -l)}; do
+    ddcutil setvcp 10 $1 -d $monitor --async &
+  done
+}
