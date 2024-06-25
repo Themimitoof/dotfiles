@@ -6,10 +6,12 @@
 	# TODO: find a way to automate this part that work for any computer
 	# that use this repo
 
-
 [alias]
 rollback = reset --soft HEAD^
 trash = reset --hard
 
 [core]
 	excludesFile = ~/.gitignore_global
+
+[init]
+    defaultBranch = main
