@@ -1,0 +1,148 @@
+packages:
+  darwin:
+    brews:
+      # Tools
+      - git
+      - git-lfs
+      - htop
+      - curl
+      - just
+      - jq
+      - ripgrep
+      - xq
+      - fdupes
+      - tmux  # not using it anymore but always good to have it somewhere
+      - minicom
+      # Editors
+      - neovim
+      # Communications
+      - weechat
+      - neomutt
+      # Network tools
+      - mtr
+      - doggo
+      - mosh
+      # Python
+      - python
+      - uv
+      - poetry
+      # Ruby
+      - ruby
+      # Golang
+      - go
+      - hugo
+      # NodeJS
+      - node
+      - fnm
+      # Docker, Kubernetes and OCI-compliant image tools
+      - dive
+      - kubernetes-cli
+      - minikube
+      - helm
+      - flux
+      # Infra as a code
+      - terraform
+      - vault
+      - ansible
+      # IA stuff
+      - ollama
+      # Dev stuff
+      - gh  # github cli
+      - sqlite
+      # Image and video
+      - ffmpeg
+      - imagemagick
+    casks:
+      # Network tools
+      - google-cloud-sdk
+      - winbox
+      # Fonts
+      - font-jetbrains-mono-nerd-font
+      - font-hack-nerd-font
+      # Terminals
+      - kitty
+      # Editors
+      - visual-studio-code
+      - zed
+      - obsidian
+      # Browsers
+      - firefox
+      - google-chrome
+      # Window management
+      - rectangle
+      # Tools
+      - monitorcontrol
+      - hiddenbar
+      # Communications
+      - slack
+      - element
+      # Project management
+      - todoist
+      # Misc
+      - obs
+  archlinux:
+    packages:
+      # Tools
+      - git
+      - git-lfs
+      - htop
+      - curl
+      - just
+      - jq
+      - ripgrep
+      - fdupes
+      - tmux  # not using it anymore but always good to have it somewhere
+      - minicom
+      # Editors
+      - neovim
+      # Communications
+      - weechat
+      - neomutt
+      - thunderbird
+      - element-desktop
+      # Terminal and shells
+      - kitty
+      - zsh
+      # Network tools
+      - bind
+      - mtr
+      - mosh
+      # Python
+      - python
+      - uv
+      - python-poetry
+      # Ruby
+      - ruby
+      # Golang
+      - go
+      - hugo
+      # NodeJS
+      - nodejs
+      # Docker, Kubernetes and OCI-compliant image tools
+      - dive
+      - kubectl
+      - minikube
+      - helm
+      - fluxcd
+      # Infra as a code
+      - terraform
+      - vault
+      - ansible
+      # IA stuff
+      - ollama
+      # Dev stuff
+      - github-cli  # github cli
+      # Image and video
+      - ffmpeg
+      - imagemagick
+      # Window managers
+      # Gnome must be installed by default via arch-install
+      - gnome-tweaks
+      - hyprland
+    aur-yay:
+      # Tools
+      - xq-bin
+      # Network tools
+      - doggo-bin
+      # NodeJS
+      - fnm-bin
